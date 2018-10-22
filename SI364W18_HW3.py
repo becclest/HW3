@@ -1,5 +1,6 @@
 # SI 364 - Winter 2018
 # HW 3
+# Brianna Eccleston
 
 ####################
 # Import statements
