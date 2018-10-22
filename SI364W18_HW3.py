@@ -16,6 +16,7 @@ from flask_script import Manager, Shell  # New
 # Application configurations
 ############################
 app = Flask(__name__)
+app.debug = True
 app.config['SECRET_KEY'] = 'hard to guess string from si364'
 # TODO 364: Create a database in postgresql in the code line below, and fill in your app's database URI. It should be of the format: postgresql://localhost/YOUR_DATABASE_NAME
 
@@ -222,9 +223,9 @@ def index():
 def see_all_tweets():
     tweets = Tweet.query.all()
     all_tweets = []
-    for t in tweets:
-        filter_tweets = User.query.filter_by(id=t.user_id).first()
-        tweetObj = (t.text, filter_tweets.display_name)
+    for tw in tweets:
+        filter_tweets = User.query.filter_by(id=tw.user_id).first()
+        tweetObj = (tw.text, filter_tweets.display_name)
         all_tweets.append(tweetObj)
     return render_template('all_tweets.html', all_tweets=all_tweets)
 
@@ -239,7 +240,26 @@ def see_all_users():
 
 @app.route('/longest_tweet')
 def longest_tweet():
-    pass
+    all_tweets = Tweet.query.all()
+    tweets_dict = {}
+
+    for tw in all_tweets:
+        tweet_count = 0
+        tlength = tw.text
+        for char in tlength:
+            if char != ' ':
+                tweet_count += 1
+        tweets_dict[tlength] = tweet_count
+        sorted_tweets = sorted(tweets_dict.items(),
+                               key=lambda x: x[1], reverse=True)
+        longest_tweet = sorted_tweets[0][0]
+        user = User.query.filter_by(id=tw.user_id).first()
+        username = user.username
+        displayName = user.display_name
+
+    return render_template('longest_tweet.html', display_name=displayName, longest_tweet=longest_tweet, username=username)
+
+
 # Create another route (no scaffolding provided) at /longest_tweet with a view function get_longest_tweet (see details below for what it should do)
 # TODO 364
 # Create a template to accompany it called longest_tweet.html that extends from base.html.
@@ -257,4 +277,4 @@ def longest_tweet():
 if __name__ == '__main__':
     db.create_all()  # Will create any defined models when you run the application
     manager.run()
-    app.run(use_reloader=True, debug=True)  # The usual
+    app.run(use_reloader=True)
