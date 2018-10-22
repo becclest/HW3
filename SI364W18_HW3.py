@@ -241,10 +241,10 @@ def see_all_users():
 
 @app.route('/longest_tweet')
 def longest_tweet():
-    all_tweets = Tweet.query.all()
+    comp_tweets = Tweet.query.all()
     tweets_dict = {}
 
-    for tw in all_tweets:
+    for tw in comp_tweets:
         tweet_count = 0
         tlength = tw.text
         for char in tlength:
