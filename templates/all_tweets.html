@@ -2,20 +2,20 @@
 
 {% block content %}
 <ul>
-{% for tw in all_tweets %}
+    {% for tw in all_tweets %}
     <li>{{ tw[0] }}<br><i>posted by</i> <strong>@{{ tw[1] }}</strong></li><br><br>
-{% endfor %}
+    {% endfor %}
 </ul>
 
 {% if not all_tweets %}
-    There are no saved tweets to show.
+There are no saved tweets to show.
 {% endif %}
 
 
 <div>
-{% for message in get_flashed_messages() %}
+    {% for message in get_flashed_messages() %}
     <strong>*** {{ message }} ***</strong>
-{% endfor %}
+    {% endfor %}
 </div>
 
 {% endblock %}
